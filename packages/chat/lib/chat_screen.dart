@@ -22,21 +22,25 @@ class _ChatScreenState extends State<ChatScreen> {
         date: DateTime.now().subtract(const Duration(days: 4)),
         isSentByMe: false),
     Message(
-        text: 'Whats going on?',
-        date: DateTime.now().subtract(const Duration(days: 3)),
-        isSentByMe: true),
-    Message(
         text: 'Nothing much, just chlling out',
         date: DateTime.now().subtract(const Duration(days: 3)),
         isSentByMe: false),
     Message(
-        text: 'What about movie night? will u come?',
-        date: DateTime.now().subtract(const Duration(days: 2)),
-        isSentByMe: false),
+        text: 'Whats going on?',
+        date: DateTime.now().subtract(const Duration(days: 3)),
+        isSentByMe: true),
     Message(
         text: 'thinking about it, have some works , have to postpond',
         date: DateTime.now().subtract(const Duration(days: 2)),
         isSentByMe: true),
+    Message(
+        text: 'I heart some intersting facts about  the movie',
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        isSentByMe: false),
+    Message(
+        text: 'What about movie night tomorrow? will u come?',
+        date: DateTime.now().subtract(const Duration(days: 2)),
+        isSentByMe: false),
     Message(
         text: 'Hmmm, try to come man, always work',
         date: DateTime.now().subtract(const Duration(days: 1)),
@@ -45,8 +49,36 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xff3F51B5),
-      appBar: AppBar(title: const Text('Chat UI')),
+      backgroundColor: Color(0xffFAFAFA),
+      // backgroundColor: Colors.amber,
+      appBar: AppBar(
+        toolbarHeight: 100,
+        title: const Text(
+          'Buddy',
+          style: TextStyle(color: Color(0xff030303)),
+        ),
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        automaticallyImplyLeading: false,
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Color(0xff030303)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: CircleAvatar(
+                radius: 24,
+                backgroundImage: NetworkImage(
+                    "https://igimages.gumlet.io/malayalam/gallery/actress/saipallavi7715/saipallavi11072022_089.jpg?w=376&dpr=2.6")),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:
+                CircleAvatar(backgroundColor: Colors.green.shade300, radius: 8),
+          )
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -68,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       DateFormat.yMMMMd().format(message.date),
-                      style: TextStyle(color: Colors.grey.shade700),
+                      style: TextStyle(color: Colors.black26),
                     ),
                   ),
                 ),
@@ -82,55 +114,80 @@ class _ChatScreenState extends State<ChatScreen> {
                 constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.7),
                 child: Card(
-                  color: message.isSentByMe
-                      ? Color(0xffC5CAE8)
-                      : Color(0xffE8EAF6),
+                  color: message.isSentByMe ? Color(0xff703EFE) : Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: message.isSentByMe
+                            ? Radius.circular(10)
+                            : Radius.zero,
+                        bottomRight: message.isSentByMe
+                            ? Radius.zero
+                            : Radius.circular(10),
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10)),
                   ),
-                  elevation: 4,
+                  elevation: 0,
                   child: Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Text(message.text),
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+                    child: Text(
+                      message.text,
+                      style: TextStyle(
+                          color: message.isSentByMe
+                              ? Colors.white
+                              : Color(0xff030303)),
+                    ),
                   ),
                 ),
               ),
             ),
           )),
-          Container(
-            // color: Colors.grey.shade300,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    labelText: 'Enter your username',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                    suffixIcon: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: const FaIcon(
-                          FontAwesomeIcons.paperPlane,
-                          color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.all(0),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: TextField(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Color(0xffFAFAFA),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(color: Color(0xffFAFAFA))),
+                      labelText: 'Type here...',
+                      labelStyle: TextStyle(
+                        color: Color(0xffA1A1A1),
+                      ),
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20),
+                      suffixIcon: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            // color: Colors.green,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: const FaIcon(
+                            FontAwesomeIcons.paperPlane,
+                            color: Color(0xffA1A1A1),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  onSubmitted: (text) {
-                    final message = Message(
-                        text: text, date: DateTime.now(), isSentByMe: true);
-                    setState(() {
-                      messages.add(message);
-                    });
-                  }),
+                    onSubmitted: (text) {
+                      final message = Message(
+                          text: text, date: DateTime.now(), isSentByMe: true);
+                      setState(() {
+                        messages.add(message);
+                      });
+                    }),
+              ),
             ),
           )
         ],
