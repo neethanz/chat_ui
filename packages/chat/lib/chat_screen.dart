@@ -2,6 +2,7 @@ import 'package:chat/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -44,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xff3F51B5),
       appBar: AppBar(title: const Text('Chat UI')),
       body: Column(
         children: [
@@ -56,16 +58,17 @@ class _ChatScreenState extends State<ChatScreen> {
             order: GroupedListOrder.DESC,
             groupBy: (Message message) => DateTime(
                 message.date.year, message.date.month, message.date.day),
-            groupHeaderBuilder: (Message message) => SizedBox(
-              height: 40,
-              child: Align(
-                alignment: Alignment.center,
-                child: Card(
-                  color: Theme.of(context).primaryColor,
+            groupHeaderBuilder: (Message message) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: SizedBox(
+                height: 40,
+                child: Align(
+                  alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
                       DateFormat.yMMMMd().format(message.date),
+                      style: TextStyle(color: Colors.grey.shade700),
                     ),
                   ),
                 ),
@@ -79,9 +82,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 constraints: BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width * 0.7),
                 child: Card(
-                  elevation: 8,
+                  color: message.isSentByMe
+                      ? Color(0xffC5CAE8)
+                      : Color(0xffE8EAF6),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  elevation: 4,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: Text(message.text),
                   ),
                 ),
@@ -89,17 +99,39 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           )),
           Container(
-            color: Colors.grey.shade300,
-            child: TextField(
-                decoration:
-                    const InputDecoration(hintText: 'Type your message here'),
-                onSubmitted: (text) {
-                  final message = Message(
-                      text: text, date: DateTime.now(), isSentByMe: true);
-                  setState(() {
-                    messages.add(message);
-                  });
-                }),
+            // color: Colors.grey.shade300,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              child: TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    labelText: 'Enter your username',
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                    suffixIcon: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(30)),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: const FaIcon(
+                          FontAwesomeIcons.paperPlane,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  onSubmitted: (text) {
+                    final message = Message(
+                        text: text, date: DateTime.now(), isSentByMe: true);
+                    setState(() {
+                      messages.add(message);
+                    });
+                  }),
+            ),
           )
         ],
       ),
